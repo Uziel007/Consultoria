@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultoría Tecnológica - Contacto</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4e73df;
+      --secondary-color: #2d89ef;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+    }
+    
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    .nav-link {
+      color: #5a5c69;
+      font-weight: 500;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      color: var(--primary-color);
+    }
+    
+    .contact-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    
+    .contact-title {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 8px;
+      display: inline-block;
+    }
+    
+    .btn-whatsapp {
+      background-color: #25D366;
+      color: white;
+    }
+    
+    .btn-whatsapp:hover {
+      background-color: #128C7E;
+      color: white;
+    }
+    
+    .btn-email {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    
+    .btn-email:hover {
+      background-color: #1b5fad;
+      color: white;
+    }
+    
+    .service-select {
+      height: 45px;
+    }
+    
+    footer {
+      background-color: #343a40;
+      color: white;
+      padding: 2rem 0;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="bi bi-lightbulb"></i> Consultoría Tecnológica
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="nosotros.html">Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="servicios.html">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="clientes.html">Clientes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="contacto.html">Contacto</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="container">
+    <div class="contact-container">
+      <h2 class="contact-title"><i class="bi bi-envelope"></i> Contáctanos</h2>
+      
+      <form id="contact-form">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="nombre" class="form-label">Nombre completo</label>
+            <input type="text" class="form-control" id="nombre" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="empresa" class="form-label">Empresa (opcional)</label>
+            <input type="text" class="form-control" id="empresa">
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="correo" class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control" id="correo" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" id="telefono" required>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="servicio" class="form-label">Servicio de interés</label>
+          <select class="form-select service-select" id="servicio">
+            <option value="" selected>Seleccione un servicio</option>
+            <!-- Los servicios se cargarán dinámicamente aquí -->
+          </select>
+        </div>
+        
+        <div class="mb-3">
+          <label for="mensaje" class="form-label">Mensaje</label>
+          <textarea class="form-control" id="mensaje" rows="5" required></textarea>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="button" id="btn-whatsapp" class="btn btn-whatsapp me-md-2">
+            <i class="bi bi-whatsapp"></i> Enviar por WhatsApp
+          </button>
+          <button type="submit" id="btn-email" class="btn btn-email">
+            <i class="bi bi-envelope"></i> Enviar por Email
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Pie de página -->
+  <footer class="text-center">
+    <div class="container">
+      <p>&copy; 2023 Consultoría Tecnológica. Todos los derechos reservados.</p>
+      <div class="mt-2">
+        <a href="#" class="text-white mx-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="text-white mx-2"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="text-white mx-2"><i class="bi bi-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    
+    // Configuración Supabase
+    const supabaseUrl = 'https://yyxccrvyezdtktkmxcam.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5eGNjcnZ5ZXpkdGt0a214Y2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjQxODQsImV4cCI6MjA1OTc0MDE4NH0.9h4lKn9mCINM7Yr1TAyIR2RXphiX73MFp3KUnsBApyA';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    
+    // Cargar servicios al iniciar
+    document.addEventListener('DOMContentLoaded', async function() {
+      await loadServices();
+      setupWhatsAppButton();
+    });
+    
+    // Cargar servicios desde Supabase
+    async function loadServices() {
+      try {
+        const { data: servicios, error } = await supabase
+          .from('servicios')
+          .select('id, titulo')
+          .eq('activo', true)
+          .order('titulo', { ascending: true });
+        
+        if (error) throw error;
+        
+        const select = document.getElementById('servicio');
+        servicios.forEach(servicio => {
+          const option = document.createElement('option');
+          option.value = servicio.titulo;
+          option.textContent = servicio.titulo;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error al cargar servicios:', error);
+      }
+    }
+    
+    // Configurar botón de WhatsApp
+    function setupWhatsAppButton() {
+      document.getElementById('btn-whatsapp').addEventListener('click', function() {
+        const nombre = document.getElementById('nombre').value;
+        const empresa = document.getElementById('empresa').value;
+        const telefono = document.getElementById('telefono').value;
+        const servicio = document.getElementById('servicio').value;
+        const mensaje = document.getElementById('mensaje').value;
+        
+        const whatsappMessage = `Hola, tengo una duda o me gustaría que me realices un proyecto de:\n\n` +
+                               `*Servicio:* ${servicio || 'No especificado'}\n` +
+                               `*Nombre:* ${nombre}\n` +
+                               `*Empresa:* ${empresa || 'No especificada'}\n` +
+                               `*Teléfono:* ${telefono}\n` +
+                               `*Mensaje:* ${mensaje}\n\n` +
+                               `Enviado desde el sitio web de Consultoría Tecnológica`;
+        
+        const encodedMessage = encodeURIComponent(whatsappMessage);
+        window.open(`https://wa.me/5585067049?text=${encodedMessage}`, '_blank');
+      });
+    }
+    
+    // Configurar EmailJS
+    emailjs.init("9q18Y1yh29rNVs57E");
+    
+    document.getElementById("contact-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      const nombre = document.getElementById('nombre').value;
+      const empresa = document.getElementById('empresa').value;
+      const correo = document.getElementById('correo').value;
+      const telefono = document.getElementById('telefono').value;
+      const servicio = document.getElementById('servicio').value;
+      const mensaje = document.getElementById('mensaje').value;
+      
+      // Guardar en Supabase (tabla clientes)
+      saveToSupabase(nombre, empresa, correo, telefono, servicio, mensaje);
+      
+      // Enviar por EmailJS
+      emailjs.send("service_24xpnkq", "template_8ifgch6", {
+        nombre: nombre,
+        correo: correo,
+        telefono: telefono,
+        empresa: empresa,
+        servicio: servicio,
+        mensaje: mensaje,
+        title: "Nuevo contacto desde el sitio"
+      })
+      .then(() => {
+        alert("¡Mensaje enviado correctamente por correo!");
+        document.getElementById("contact-form").reset();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Hubo un error al enviar el mensaje por correo.");
+      });
+    });
+    
+    // Guardar en Supabase
+    async function saveToSupabase(nombre, empresa, correo, telefono, servicio, mensaje) {
+      try {
+        const { data, error } = await supabase
+          .from('clientes')
+          .insert([{
+            nombre: nombre,
+            empresa: empresa,
+            correo: correo,
+            telefono: telefono,
+            servicio_interes: servicio,
+            mensaje: mensaje
+          }]);
+        
+        if (error) throw error;
+        console.log('Datos guardados en Supabase');
+      } catch (error) {
+        console.error('Error al guardar en Supabase:', error);
+      }
+    }
+  </script>
+</body>
+</html>
