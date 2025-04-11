@@ -53,15 +53,14 @@
     <button type="submit">Enviar</button>
   </form>
 
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
-    (function() {
-      emailjs.init("9q18Y1yh29rNVs57E");
-    })();
-
+    // Inicializa con tu Public Key
+    emailjs.init("9q18Y1yh29rNVs57E");
+  
     document.getElementById("contact-form").addEventListener("submit", function(e) {
       e.preventDefault();
-
+  
       emailjs.send("service_24xpnkq", "template_8ifgch6", {
         nombre: document.getElementById("nombre").value,
         correo: document.getElementById("correo").value,
@@ -70,12 +69,13 @@
         mensaje: document.getElementById("mensaje").value,
         title: "Nuevo contacto desde el sitio"
       })
-      .then(function() {
+      .then(() => {
         alert("¡Mensaje enviado correctamente!");
         document.getElementById("contact-form").reset();
-      }, function(error) {
+      })
+      .catch((error) => {
         console.error("Error:", error);
-        alert("Hubo un error al enviar el mensaje. Intenta nuevamente.");
+        alert("Hubo un error al enviar el mensaje.");
       });
     });
   </script>
