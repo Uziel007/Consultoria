@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Altior Vidya - Nuestros Servicios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #34495e;
+      --accent-color: #3498db;
+      --dark-color: #1a252f;
+      --light-color: #ecf0f1;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+    }
+    
+    .navbar {
+      background-color: var(--dark-color);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: white;
+      display: flex;
+      align-items: center;
+    }
+    
+    .navbar-brand .logo-icon {
+      color: var(--accent-color);
+      margin-right: 10px;
+      font-size: 1.8rem;
+    }
+    
+    .nav-link {
+      color: var(--light-color);
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      margin: 0 0.2rem;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    
+    .nav-link:hover {
+      color: var(--accent-color);
+      background-color: rgba(255,255,255,0.1);
+    }
+    
+    .nav-link.active {
+      color: white;
+      background-color: var(--accent-color);
+    }
+    
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 5rem 0;
+      text-align: center;
+    }
+    
+    .section-title {
+      color: var(--primary-color);
+      position: relative;
+      padding-bottom: 15px;
+      margin-bottom: 2rem;
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 80px;
+      height: 3px;
+      background: var(--accent-color);
+      transform: translateX(-50%);
+    }
+    
+    .service-card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .service-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .service-title {
+      background-color: var(--accent-color);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .service-description {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(44, 62, 80, 0.9);
+      color: white;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .service-card:hover .service-description {
+      opacity: 1;
+    }
+    
+    .intro-text {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      text-align: center;
+    }
+    
+    footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 2.5rem 0;
+      margin-top: 3rem;
+    }
+    
+    .social-icon {
+      color: white;
+      font-size: 1.5rem;
+      margin: 0 10px;
+      transition: all 0.3s;
+    }
+    
+    .social-icon:hover {
+      color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="bi bi-lightbulb logo-icon"></i>
+        Altior Vidya
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="nosotros.html">Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="servicios.html">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="clientes.html">Clientes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contacto.html">Contacto</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sección Hero -->
+  <section class="hero-section">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-3">Nuestros Servicios</h1>
+      <p class="lead">Soluciones tecnológicas integrales para tu transformación digital</p>
+    </div>
+  </section>
+
+  <!-- Introducción -->
+  <section class="py-5">
+    <div class="container">
+      <div class="intro-text">
+        <h2 class="section-title">Expertos en Ingeniería de Sistemas</h2>
+        <p class="lead">Ofrecemos servicios especializados en todas las áreas de la ingeniería en sistemas e informática. Desde desarrollo de software y APIs hasta infraestructura de redes y ciberseguridad, nuestro equipo de expertos proporciona soluciones a medida para impulsar tu negocio en la era digital.</p>
+      </div>
+      
+      <div class="row" id="services-container">
+        <!-- Los servicios se cargarán dinámicamente aquí -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Pie de página -->
+  <footer class="text-center">
+    <div class="container">
+      <img src="Recursos/Logos/logo-transparent.png" alt="Altior Vidya" style="height: 100px; margin-bottom: 1rem;">
+      <p>Altior Vidya - Conocimiento elevado para tu transformación digital</p>
+      <div class="mt-3">
+        <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+        <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+        <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+      </div>
+      <p class="mt-3 mb-0">&copy; 2023 Altior Vidya. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    
+    // Configuración Supabase
+    const supabaseUrl = 'https://yyxccrvyezdtktkmxcam.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5eGNjcnZ5ZXpkdGt0a214Y2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjQxODQsImV4cCI6MjA1OTc0MDE4NH0.9h4lKn9mCINM7Yr1TAyIR2RXphiX73MFp3KUnsBApyA';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    
+    // Cargar servicios al iniciar
+    document.addEventListener('DOMContentLoaded', async function() {
+      await loadServices();
+    });
+    
+    // Cargar servicios desde Supabase
+    async function loadServices() {
+      try {
+        const { data: servicios, error } = await supabase
+          .from('servicios')
+          .select('*')
+          .eq('activo', true)
+          .order('titulo', { ascending: true });
+        
+        if (error) throw error;
+        
+        const container = document.getElementById('services-container');
+        
+        servicios.forEach(servicio => {
+          const serviceElement = document.createElement('div');
+          serviceElement.className = 'col-md-6 col-lg-4';
+          serviceElement.innerHTML = `
+            <div class="service-card">
+              <img src="${servicio.imagen_url}" class="service-img" alt="${servicio.titulo}">
+              <div class="service-title">${servicio.titulo}</div>
+              <div class="service-description">
+                <p>${servicio.descripcion}</p>
+              </div>
+            </div>
+          `;
+          
+          container.appendChild(serviceElement);
+        });
+      } catch (error) {
+        console.error('Error al cargar servicios:', error);
+        
+        // Mostrar mensaje de error al usuario
+        const container = document.getElementById('services-container');
+        container.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+            <h3 class="mt-3">Error al cargar los servicios</h3>
+            <p>Por favor intenta recargar la página o contacta con soporte.</p>
+            <button class="btn btn-primary" onclick="window.location.reload()">
+              <i class="bi bi-arrow-clockwise"></i> Recargar
+            </button>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
