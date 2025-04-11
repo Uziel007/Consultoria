@@ -232,10 +232,7 @@
           <label for="servicio" class="form-label">Servicio de interés</label>
           <select class="form-select" id="servicio">
             <option value="" selected>Seleccione un servicio</option>
-            <option value="Consultoría Tecnológica">Consultoría Tecnológica</option>
-            <option value="Desarrollo de Software">Desarrollo de Software</option>
-            <option value="Inteligencia Artificial">Inteligencia Artificial</option>
-            <option value="Transformación Digital">Transformación Digital</option>
+            <!-- Las opciones se cargarán dinámicamente desde la base de datos -->
           </select>
         </div>
         
@@ -290,6 +287,39 @@
       
       // Configurar EmailJS
       emailjs.init("9q18Y1yh29rNVs57E");
+      
+      // Función para cargar los servicios desde Supabase
+      async function loadServices() {
+        try {
+          const { data: servicios, error } = await supabase
+            .from('servicios')
+            .select('titulo')
+            .eq('activo', true);
+          
+          if (error) throw error;
+          
+          const selectServicio = document.getElementById('servicio');
+          
+          // Limpiar opciones existentes (excepto la primera)
+          while (selectServicio.options.length > 1) {
+            selectServicio.remove(1);
+          }
+          
+          // Agregar nuevas opciones
+          servicios.forEach(servicio => {
+            const option = document.createElement('option');
+            option.value = servicio.titulo;
+            option.textContent = servicio.titulo;
+            selectServicio.appendChild(option);
+          });
+          
+        } catch (error) {
+          console.error('Error al cargar servicios:', error);
+        }
+      }
+      
+      // Cargar servicios al cargar la página
+      document.addEventListener('DOMContentLoaded', loadServices);
       
       // Función para guardar cliente en Supabase
       async function saveClientToSupabase(nombre, correo, telefono, empresa, mensaje) {
