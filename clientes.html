@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Altior Vidya - Opiniones de Clientes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- SweetAlert2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #34495e;
+      --accent-color: #3498db;
+      --dark-color: #1a252f;
+      --light-color: #ecf0f1;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+    }
+    
+    .navbar {
+      background-color: var(--dark-color);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: white;
+      display: flex;
+      align-items: center;
+    }
+    
+    .navbar-brand .logo-icon {
+      color: var(--accent-color);
+      margin-right: 10px;
+      font-size: 1.8rem;
+    }
+    
+    .nav-link {
+      color: var(--light-color);
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      margin: 0 0.2rem;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    
+    .nav-link:hover {
+      color: var(--accent-color);
+      background-color: rgba(255,255,255,0.1);
+    }
+    
+    .nav-link.active {
+      color: white;
+      background-color: var(--accent-color);
+    }
+    
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 5rem 0;
+      text-align: center;
+    }
+    
+    .section-title {
+      color: var(--primary-color);
+      position: relative;
+      padding-bottom: 15px;
+      margin-bottom: 2rem;
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 80px;
+      height: 3px;
+      background: var(--accent-color);
+      transform: translateX(-50%);
+    }
+    
+    .testimonial-card {
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      height: 100%;
+      transition: transform 0.3s;
+      background-color: white;
+    }
+    
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .testimonial-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .testimonial-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 1rem;
+      background-color: var(--light-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+    
+    .testimonial-rating {
+      color: #FFD700;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .testimonial-date {
+      color: #757575;
+      font-size: 0.9rem;
+    }
+    
+    .alternate-bg {
+      background-color: #f8f9fa;
+    }
+    
+    .rating-input {
+      display: flex;
+      justify-content: center;
+      margin: 1rem 0;
+      direction: rtl;
+    }
+    
+    .rating-input input {
+      display: none;
+    }
+    
+    .rating-input label {
+      font-size: 2rem;
+      color: #ddd;
+      cursor: pointer;
+      padding: 0 0.2rem;
+    }
+    
+    .rating-input input:checked ~ label,
+    .rating-input label:hover,
+    .rating-input label:hover ~ label {
+      color: #FFD700;
+    }
+    
+    .rating-input input:checked + label:hover,
+    .rating-input input:checked ~ label:hover,
+    .rating-input label:hover ~ input:checked ~ label,
+    .rating-input input:checked ~ label:hover ~ label {
+      color: #FFED85;
+    }
+    
+    footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 2.5rem 0;
+      margin-top: 3rem;
+    }
+    
+    .social-icon {
+      color: white;
+      font-size: 1.5rem;
+      margin: 0 10px;
+      transition: all 0.3s;
+    }
+    
+    .social-icon:hover {
+      color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+
+    /* Estilos para las alertas */
+    .swal2-popup {
+      border-radius: 8px !important;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    }
+
+    .swal2-title {
+      color: var(--primary-color) !important;
+      font-weight: 600 !important;
+    }
+
+    .swal2-confirm {
+      background-color: var(--accent-color) !important;
+      border: none !important;
+      padding: 10px 24px !important;
+      border-radius: 4px !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="bi bi-lightbulb logo-icon"></i>
+        Altior Vidya
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="nosotros.html">Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="servicios.html">Servicios</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="clientes.html">Clientes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contacto.html">Contacto</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sección Hero -->
+  <section class="hero-section">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-3">Opiniones de Nuestros Clientes</h1>
+      <p class="lead">La satisfacción de nuestros clientes es el mejor testimonio de nuestro trabajo</p>
+    </div>
+  </section>
+
+  <!-- Testimonios -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="section-title text-center">Lo que dicen sobre nosotros</h2>
+      <p class="text-center mb-5">Estas son algunas de las opiniones de clientes que han confiado en nuestros servicios y soluciones tecnológicas.</p>
+      
+      <div class="row" id="testimonials-container">
+        <!-- Los testimonios se cargarán dinámicamente aquí -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Formulario para nuevo testimonio -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-body p-5">
+              <h2 class="section-title text-center">Deja tu testimonio</h2>
+              <p class="text-center mb-4">¿Has trabajado con nosotros? Comparte tu experiencia.</p>
+              
+              <form id="testimonial-form">
+                <div class="mb-3">
+                  <label for="testimonial-name" class="form-label">Nombre *</label>
+                  <input type="text" class="form-control" id="testimonial-name" required>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="testimonial-email" class="form-label">Correo electrónico *</label>
+                  <input type="email" class="form-control" id="testimonial-email" required>
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Valoración *</label>
+                  <div class="rating-input">
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5" title="Excelente">★</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4" title="Muy bueno">★</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3" title="Bueno">★</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2" title="Regular">★</label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1" title="Malo">★</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="testimonial-comment" class="form-label">Tu testimonio *</label>
+                  <textarea class="form-control" id="testimonial-comment" rows="4" required></textarea>
+                </div>
+                
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-send"></i> Enviar Testimonio
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pie de página -->
+  <footer class="text-center">
+    <div class="container">
+      <img src="Recursos/Logos/logo-transparent.png" alt="Altior Vidya" style="height: 100px; margin-bottom: 1rem;">
+      <p>Altior Vidya - Conocimiento elevado para tu transformación digital</p>
+      <div class="mt-3">
+        <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+        <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+        <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+      </div>
+      <p class="mt-3 mb-0">&copy; 2023 Altior Vidya. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    
+    // Configuración Supabase
+    const supabaseUrl = 'https://yyxccrvyezdtktkmxcam.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5eGNjcnZ5ZXpkdGt0a214Y2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjQxODQsImV4cCI6MjA1OTc0MDE4NH0.9h4lKn9mCINM7Yr1TAyIR2RXphiX73MFp3KUnsBApyA';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    
+    // Cargar testimonios al iniciar
+    document.addEventListener('DOMContentLoaded', async function() {
+      await loadTestimonials();
+      setupTestimonialForm();
+    });
+    
+    // Cargar testimonios desde Supabase
+    async function loadTestimonials() {
+      try {
+        const { data: testimonios, error } = await supabase
+          .from('testimonios')
+          .select(`
+            id,
+            comentario,
+            valoracion,
+            fecha,
+            clientes:cliente_id (nombre, correo)
+          `)
+          .order('fecha', { ascending: false });
+        
+        if (error) throw error;
+        
+        const container = document.getElementById('testimonials-container');
+        container.innerHTML = '';
+        
+        if (testimonios.length === 0) {
+          container.innerHTML = `
+            <div class="col-12 text-center py-5">
+              <i class="bi bi-chat-square-text" style="font-size: 3rem; color: #ccc;"></i>
+              <h3 class="mt-3">Aún no hay testimonios</h3>
+              <p>Sé el primero en compartir tu experiencia.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        testimonios.forEach((testimonio, index) => {
+          const testimonialDate = new Date(testimonio.fecha);
+          const formattedDate = testimonialDate.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+          
+          const stars = '★'.repeat(testimonio.valoracion) + '☆'.repeat(5 - testimonio.valoracion);
+          const clientName = testimonio.clientes?.nombre || 'Cliente Satisfecho';
+          const clientEmail = testimonio.clientes?.correo || '';
+          const initials = clientName.split(' ').map(n => n[0]).join('').toUpperCase();
+          
+          const testimonialElement = document.createElement('div');
+          testimonialElement.className = `col-md-6 col-lg-4 ${index % 2 !== 0 ? 'alternate-bg' : ''}`;
+          testimonialElement.innerHTML = `
+            <div class="testimonial-card">
+              <div class="testimonial-meta">
+                <div class="testimonial-avatar">${initials}</div>
+                <div>
+                  <h5 class="mb-1">${clientName}</h5>
+                  <div class="testimonial-rating" title="${testimonio.valoracion} de 5 estrellas">
+                    ${stars}
+                  </div>
+                </div>
+              </div>
+              <p class="testimonial-text">"${testimonio.comentario}"</p>
+              <p class="testimonial-date"><small>${formattedDate}</small></p>
+            </div>
+          `;
+          
+          container.appendChild(testimonialElement);
+        });
+      } catch (error) {
+        console.error('Error al cargar testimonios:', error);
+        
+        const container = document.getElementById('testimonials-container');
+        container.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+            <h3 class="mt-3">Error al cargar los testimonios</h3>
+            <p>Por favor intenta recargar la página.</p>
+            <button class="btn btn-primary" onclick="window.location.reload()">
+              <i class="bi bi-arrow-clockwise"></i> Recargar
+            </button>
+          </div>
+        `;
+      }
+    }
+    
+    // Configurar formulario de testimonio
+    function setupTestimonialForm() {
+      const form = document.getElementById('testimonial-form');
+      
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('testimonial-name').value;
+        const email = document.getElementById('testimonial-email').value;
+        const rating = document.querySelector('input[name="rating"]:checked')?.value;
+        const comment = document.getElementById('testimonial-comment').value;
+        
+        if (!name || !email || !rating || !comment) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Campos incompletos',
+            text: 'Por favor completa todos los campos obligatorios.',
+            confirmButtonText: 'Entendido'
+          });
+          return;
+        }
+        
+        // Validar email
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Email inválido',
+            text: 'Por favor ingresa un correo electrónico válido.',
+            confirmButtonText: 'Entendido'
+          });
+          return;
+        }
+        
+        // Mostrar carga
+        Swal.fire({
+          title: 'Enviando testimonio',
+          html: 'Por favor espera mientras procesamos tu testimonio...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        
+        try {
+          // Primero verificar si el cliente ya existe
+          const { data: existingClient, error: clientError } = await supabase
+            .from('clientes')
+            .select('id')
+            .eq('correo', email)
+            .single();
+          
+          let clienteId;
+          
+          if (clientError || !existingClient) {
+            // Si no existe, crear nuevo cliente
+            const { data: newClient, error: newClientError } = await supabase
+              .from('clientes')
+              .insert([
+                { nombre: name, correo: email }
+              ])
+              .select()
+              .single();
+            
+            if (newClientError) throw newClientError;
+            clienteId = newClient.id;
+          } else {
+            clienteId = existingClient.id;
+          }
+          
+          // Insertar testimonio
+          const { error: testimonioError } = await supabase
+            .from('testimonios')
+            .insert([
+              {
+                cliente_id: clienteId,
+                comentario: comment,
+                valoracion: parseInt(rating)
+              }
+            ]);
+          
+          if (testimonioError) throw testimonioError;
+          
+          // Éxito
+          Swal.fire({
+            icon: 'success',
+            title: '¡Gracias por tu testimonio!',
+            text: 'Tu opinión ha sido registrada y será visible después de su aprobación.',
+            confirmButtonText: 'Entendido'
+          });
+          
+          // Limpiar formulario
+          form.reset();
+          
+          // Recargar testimonios
+          await loadTestimonials();
+        } catch (error) {
+          console.error('Error al enviar testimonio:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al enviar',
+            text: 'Hubo un problema al enviar tu testimonio. Por favor intenta nuevamente más tarde.',
+            confirmButtonText: 'Entendido'
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html>
