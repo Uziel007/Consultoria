@@ -339,6 +339,17 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5eGNjcnZ5ZXpkdGt0a214Y2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjQxODQsImV4cCI6MjA1OTc0MDE4NH0.9h4lKn9mCINM7Yr1TAyIR2RXphiX73MFp3KUnsBApyA';
     const supabase = createClient(supabaseUrl, supabaseKey);
     
+    // Función para obtener iniciales del nombre
+    function getInitials(name) {
+      if (!name) return '';
+      const parts = name.split(' ');
+      let initials = parts[0].charAt(0).toUpperCase();
+      if (parts.length > 1) {
+        initials += parts[parts.length - 1].charAt(0).toUpperCase();
+      }
+      return initials;
+    }
+    
     // Cargar testimonios al iniciar
     document.addEventListener('DOMContentLoaded', async function() {
       await loadTestimonials();
@@ -350,13 +361,7 @@
       try {
         const { data: testimonios, error } = await supabase
           .from('testimonios')
-          .select(`
-            id,
-            comentario,
-            valoracion,
-            fecha,
-            clientes:cliente_id (nombre, correo)
-          `)
+          .select('*')
           .order('fecha', { ascending: false });
         
         if (error) throw error;
@@ -384,18 +389,18 @@
           });
           
           const stars = '★'.repeat(testimonio.valoracion) + '☆'.repeat(5 - testimonio.valoracion);
-          const clientName = testimonio.clientes?.nombre || 'Cliente Satisfecho';
-          const clientEmail = testimonio.clientes?.correo || '';
-          const initials = clientName.split(' ').map(n => n[0]).join('').toUpperCase();
+          const initials = getInitials(testimonio.nombre);
           
           const testimonialElement = document.createElement('div');
           testimonialElement.className = `col-md-6 col-lg-4 ${index % 2 !== 0 ? 'alternate-bg' : ''}`;
           testimonialElement.innerHTML = `
             <div class="testimonial-card">
               <div class="testimonial-meta">
-                <div class="testimonial-avatar">${initials}</div>
+                <div class="testimonial-avatar">
+                  ${initials || '<i class="bi bi-person-fill"></i>'}
+                </div>
                 <div>
-                  <h5 class="mb-1">${clientName}</h5>
+                  <h5 class="mb-1">${testimonio.nombre || 'Cliente Satisfecho'}</h5>
                   <div class="testimonial-rating" title="${testimonio.valoracion} de 5 estrellas">
                     ${stars}
                   </div>
@@ -469,37 +474,12 @@
         });
         
         try {
-          // Primero verificar si el cliente ya existe
-          const { data: existingClient, error: clientError } = await supabase
-            .from('clientes')
-            .select('id')
-            .eq('correo', email)
-            .single();
-          
-          let clienteId;
-          
-          if (clientError || !existingClient) {
-            // Si no existe, crear nuevo cliente
-            const { data: newClient, error: newClientError } = await supabase
-              .from('clientes')
-              .insert([
-                { nombre: name, correo: email }
-              ])
-              .select()
-              .single();
-            
-            if (newClientError) throw newClientError;
-            clienteId = newClient.id;
-          } else {
-            clienteId = existingClient.id;
-          }
-          
-          // Insertar testimonio
+          // Insertar testimonio con nombre
           const { error: testimonioError } = await supabase
             .from('testimonios')
             .insert([
               {
-                cliente_id: clienteId,
+                nombre: name,
                 comentario: comment,
                 valoracion: parseInt(rating)
               }
