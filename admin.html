@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Consultoría Tecnológica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --success-color: #1cc88a;
+            --danger-color: #e74a3b;
+            --light-bg: #f8f9fc;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border: none;
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #e3e6f0;
+            font-weight: 600;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0 !important;
+        }
+
+        .form-section {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .active-form {
+            display: block;
+        }
+
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            display: none;
+        }
+
+        .spinner-border {
+            vertical-align: middle;
+        }
+
+        /* Switch toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--success-color);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Tabla de elementos */
+        .items-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .items-table th {
+            background-color: var(--light-bg);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #5a5c69;
+        }
+
+        .items-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e3e6f0;
+            vertical-align: middle;
+        }
+
+        .items-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .items-table tr:hover {
+            background-color: rgba(78, 115, 223, 0.05);
+        }
+
+        .item-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .badge-category {
+            background-color: #f6c23e;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-right: 5px;
+        }
+
+        .section-title {
+            color: #4e73df;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #4e73df;
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        .nav-tabs .nav-link {
+            color: #5a5c69;
+            font-weight: 500;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-container button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            border: none;
+            background: transparent;
+        }
+        
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-container">
+        <h1 class="text-center mb-4"><i class="bi bi-speedometer2"></i> Panel de Administración</h1>
+
+        <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="add-tab" data-bs-toggle="tab" data-bs-target="#add-content"
+                    type="button" role="tab">Agregar Contenido</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="services-tab" data-bs-toggle="tab" data-bs-target="#services-content"
+                    type="button" role="tab">Administrar Servicios</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="publications-tab" data-bs-toggle="tab"
+                    data-bs-target="#publications-content" type="button" role="tab">Administrar Publicaciones</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="clients-tab" data-bs-toggle="tab"
+                    data-bs-target="#clients-content" type="button" role="tab">Posibles Clientes</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="adminTabsContent">
+            <!-- Pestaña para agregar contenido -->
+            <div class="tab-pane fade show active" id="add-content" role="tabpanel">
+                <div class="row mb-4">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="d-grid gap-2">
+                            <button id="btn-service" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Agregar Servicio
+                            </button>
+                            <button id="btn-publication" class="btn btn-success">
+                                <i class="bi bi-plus-circle"></i> Agregar Publicación
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de Servicio -->
+                <div id="service-form" class="form-section card">
+                    <div class="card-header">
+                        <i class="bi bi-gear"></i> Nuevo Servicio
+                    </div>
+                    <div class="card-body">
+                        <form id="serviceForm">
+                            <div class="mb-3">
+                                <label for="serviceTitle" class="form-label">Título del Servicio</label>
+                                <input type="text" class="form-control" id="serviceTitle" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="serviceDescription" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="serviceDescription" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="serviceImage" class="form-label">Imagen del Servicio</label>
+                                <input type="file" class="form-control" id="serviceImage" accept="image/*">
+                                <img id="servicePreview" class="preview-image" src="#" alt="Vista previa de la imagen">
+                            </div>
+                            <div class="mb-3 form-check form-switch">
+                                <label class="form-check-label" for="serviceActive">Estado</label>
+                                <input class="form-check-input" type="checkbox" id="serviceActive" checked>
+                                <span class="form-check-slider"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <span id="serviceSpinner" class="spinner-border spinner-border-sm"
+                                    style="display: none;"></span>
+                                <span id="serviceText"><i class="bi bi-save"></i> Guardar Servicio</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Formulario de Publicación -->
+                <div id="publication-form" class="form-section card">
+                    <div class="card-header">
+                        <i class="bi bi-newspaper"></i> Nueva Publicación
+                    </div>
+                    <div class="card-body">
+                        <form id="publicationForm">
+                            <div class="mb-3">
+                                <label for="publicationTitle" class="form-label">Título</label>
+                                <input type="text" class="form-control" id="publicationTitle" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="publicationContent" class="form-label">Contenido</label>
+                                <textarea class="form-control" id="publicationContent" rows="5" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="publicationCategory" class="form-label">Categoría</label>
+                                <select class="form-select" id="publicationCategory" required>
+                                    <option value="noticias">📰 Noticias</option>
+                                    <option value="novedades">🚀 Novedades de la empresa</option>
+                                    <option value="ofertas">🎁 Ofertas temporales</option>
+                                    <option value="anuncios">📢 Anuncios importantes</option>
+                                    <option value="tips">🧠 Tips o artículos técnicos</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="publicationImage" class="form-label">Imagen de la Publicación</label>
+                                <input type="file" class="form-control" id="publicationImage" accept="image/*">
+                                <img id="publicationPreview" class="preview-image" src="#"
+                                    alt="Vista previa de la imagen">
+                            </div>
+                            <div class="mb-3">
+                                <label for="publicationDate" class="form-label">Fecha de Publicación</label>
+                                <input type="datetime-local" class="form-control" id="publicationDate" required>
+                            </div>
+                            <div class="mb-3 form-check form-switch">
+                                <label class="form-check-label" for="publicationActive">Estado</label>
+                                <input class="form-check-input" type="checkbox" id="publicationActive" checked>
+                                <span class="form-check-slider"></span>
+                            </div>
+                            <button type="submit" class="btn btn-success">
+                                <span id="publicationSpinner" class="spinner-border spinner-border-sm"
+                                    style="display: none;"></span>
+                                <span id="publicationText"><i class="bi bi-save"></i> Guardar Publicación</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Mensaje de Resultado -->
+                <div id="resultMessage" class="alert mt-3" style="display: none;"></div>
+            </div>
+
+            <!-- Pestaña para administrar servicios -->
+            <div class="tab-pane fade" id="services-content" role="tabpanel">
+                <h3 class="section-title"><i class="bi bi-gear"></i> Administrar Servicios</h3>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Lista de Servicios</span>
+                            <div class="search-container">
+                                <input type="text" id="serviceSearch" class="form-control"
+                                    placeholder="Buscar servicios...">
+                                <button id="serviceSearchBtn" class="btn btn-outline-secondary">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="items-table">
+                                <thead>
+                                    <tr>
+                                        <th>Imagen</th>
+                                        <th>Título</th>
+                                        <th>Descripción</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="servicesList">
+                                    <!-- Los servicios se cargarán aquí dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pestaña para administrar publicaciones -->
+            <div class="tab-pane fade" id="publications-content" role="tabpanel">
+                <h3 class="section-title"><i class="bi bi-newspaper"></i> Administrar Publicaciones</h3>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Lista de Publicaciones</span>
+                            <div class="search-container">
+                                <input type="text" id="publicationSearch" class="form-control"
+                                    placeholder="Buscar publicaciones...">
+                                <button id="publicationSearchBtn" class="btn btn-outline-secondary">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="items-table">
+                                <thead>
+                                    <tr>
+                                        <th>Imagen</th>
+                                        <th>Título</th>
+                                        <th>Categoría</th>
+                                        <th>Fecha</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="publicationsList">
+                                    <!-- Las publicaciones se cargarán aquí dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Nueva pestaña para posibles clientes -->
+            <div class="tab-pane fade" id="clients-content" role="tabpanel">
+                <h3 class="section-title"><i class="bi bi-people"></i> Posibles Clientes</h3>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Lista de Clientes Potenciales</span>
+                            <div class="search-container">
+                                <input type="text" id="clientSearch" class="form-control"
+                                    placeholder="Buscar clientes...">
+                                <button id="clientSearchBtn" class="btn btn-outline-secondary">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="items-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Correo</th>
+                                        <th>Teléfono</th>
+                                        <th>Empresa</th>
+                                        <th>Mensaje</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="clientsList">
+                                    <!-- Los clientes se cargarán aquí dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para confirmar cambios -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalTitle">Confirmar acción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmModalBody">
+                    ¿Estás seguro de que deseas realizar esta acción?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmActionBtn">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importación de librerías -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        // Configuración con tus credenciales
+        const supabaseUrl = 'https://yyxccrvyezdtktkmxcam.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5eGNjcnZ5ZXpkdGt0a214Y2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjQxODQsImV4cCI6MjA1OTc0MDE4NH0.9h4lKn9mCINM7Yr1TAyIR2RXphiX73MFp3KUnsBApyA';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Variables globales
+        let currentItemToUpdate = null;
+        let currentAction = null;
+        let currentItemType = null;
+        const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Elementos del DOM
+            const btnService = document.getElementById('btn-service');
+            const btnPublication = document.getElementById('btn-publication');
+            const serviceFormSection = document.getElementById('service-form');
+            const publicationFormSection = document.getElementById('publication-form');
+            const serviceForm = document.getElementById('serviceForm');
+            const publicationForm = document.getElementById('publicationForm');
+            const resultMessage = document.getElementById('resultMessage');
+            const serviceSpinner = document.getElementById('serviceSpinner');
+            const serviceText = document.getElementById('serviceText');
+            const publicationSpinner = document.getElementById('publicationSpinner');
+            const publicationText = document.getElementById('publicationText');
+            const servicesList = document.getElementById('servicesList');
+            const publicationsList = document.getElementById('publicationsList');
+            const clientsList = document.getElementById('clientsList');
+            const confirmActionBtn = document.getElementById('confirmActionBtn');
+            const serviceSearch = document.getElementById('serviceSearch');
+            const publicationSearch = document.getElementById('publicationSearch');
+            const clientSearch = document.getElementById('clientSearch');
+
+            // Cargar listados iniciales
+            loadServices();
+            loadPublications();
+            loadClients();
+
+            // Manejar parámetros de URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const tipo = urlParams.get('tipo');
+
+            if (tipo === 'servicio') {
+                const tabTrigger = new bootstrap.Tab(document.getElementById('add-tab'));
+                tabTrigger.show();
+                serviceFormSection.classList.add('active-form');
+                const titulo = urlParams.get('titulo');
+                const descripcion = urlParams.get('descripcion');
+                if (titulo) document.getElementById('serviceTitle').value = decodeURIComponent(titulo.replace(/\+/g, ' '));
+                if (descripcion) document.getElementById('serviceDescription').value = decodeURIComponent(descripcion.replace(/\+/g, ' '));
+            }
+
+            // Previsualización de imágenes
+            document.getElementById('serviceImage').addEventListener('change', function (e) {
+                const preview = document.getElementById('servicePreview');
+                const file = e.target.files[0];
+                if (file) {
+                    preview.src = URL.createObjectURL(file);
+                    preview.style.display = 'block';
+                }
+            });
+
+            document.getElementById('publicationImage').addEventListener('change', function (e) {
+                const preview = document.getElementById('publicationPreview');
+                const file = e.target.files[0];
+                if (file) {
+                    preview.src = URL.createObjectURL(file);
+                    preview.style.display = 'block';
+                }
+            });
+
+            // Cambiar entre formularios
+            btnService.addEventListener('click', function () {
+                const tabTrigger = new bootstrap.Tab(document.getElementById('add-tab'));
+                tabTrigger.show();
+                serviceFormSection.classList.add('active-form');
+                publicationFormSection.classList.remove('active-form');
+                resetForms();
+            });
+
+            btnPublication.addEventListener('click', function () {
+                const tabTrigger = new bootstrap.Tab(document.getElementById('add-tab'));
+                tabTrigger.show();
+                publicationFormSection.classList.add('active-form');
+                serviceFormSection.classList.remove('active-form');
+                resetForms();
+            });
+
+            // Reiniciar formularios
+            function resetForms() {
+                serviceForm.reset();
+                publicationForm.reset();
+                document.getElementById('servicePreview').style.display = 'none';
+                document.getElementById('publicationPreview').style.display = 'none';
+                resultMessage.style.display = 'none';
+                currentItemToUpdate = null;
+                currentAction = null;
+                currentItemType = null;
+                serviceText.innerHTML = '<i class="bi bi-save"></i> Guardar Servicio';
+                publicationText.innerHTML = '<i class="bi bi-save"></i> Guardar Publicación';
+            }
+
+            // Subir imagen al bucket 'imagenes'
+            async function uploadImage(file, folder) {
+                try {
+                    const fileName = `${folder}/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+
+                    const { data, error } = await supabase.storage
+                        .from('imagenes')
+                        .upload(fileName, file, {
+                            cacheControl: '3600',
+                            upsert: false
+                        });
+
+                    if (error) throw error;
+
+                    const { data: { publicUrl } } = supabase.storage
+                        .from('imagenes')
+                        .getPublicUrl(fileName);
+
+                    return publicUrl;
+                } catch (error) {
+                    console.error('Error al subir la imagen:', error);
+                    throw new Error('No se pudo subir la imagen. Verifica que el bucket exista y tengas permisos.');
+                }
+            }
+
+            // Envío del formulario de servicio
+            serviceForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                serviceSpinner.style.display = 'inline-block';
+                serviceText.textContent = ' Guardando...';
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+
+                try {
+                    const title = document.getElementById('serviceTitle').value;
+                    const description = document.getElementById('serviceDescription').value;
+                    const active = document.getElementById('serviceActive').checked;
+                    const imageFile = document.getElementById('serviceImage').files[0];
+
+                    let imageUrl = document.getElementById('servicePreview').src !== '#' ?
+                        document.getElementById('servicePreview').src : null;
+
+                    if (imageFile) {
+                        imageUrl = await uploadImage(imageFile, 'services');
+                    }
+
+                    if (currentAction === 'update' && currentItemToUpdate) {
+                        // Actualizar servicio existente
+                        const { data, error } = await supabase
+                            .from('servicios')
+                            .update({
+                                titulo: title,
+                                descripcion: description,
+                                imagen_url: imageUrl,
+                                activo: active
+                            })
+                            .eq('id', currentItemToUpdate)
+                            .select();
+
+                        if (error) throw error;
+
+                        showResult('¡Servicio actualizado correctamente!', 'success');
+                    } else {
+                        // Crear nuevo servicio
+                        const { data, error } = await supabase
+                            .from('servicios')
+                            .insert([{
+                                titulo: title,
+                                descripcion: description,
+                                imagen_url: imageUrl,
+                                activo: active
+                            }])
+                            .select();
+
+                        if (error) throw error;
+
+                        showResult('¡Servicio guardado correctamente!', 'success');
+                    }
+
+                    resetForms();
+                    loadServices();
+                } catch (error) {
+                    console.error('Error:', error);
+                    showResult(error.message || 'Error al guardar el servicio', 'danger');
+                } finally {
+                    serviceSpinner.style.display = 'none';
+                    serviceText.textContent = currentAction === 'update' ? 'Actualizar Servicio' : 'Guardar Servicio';
+                    submitBtn.disabled = false;
+                }
+            });
+
+            // Envío del formulario de publicación
+            publicationForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                publicationSpinner.style.display = 'inline-block';
+                publicationText.textContent = ' Guardando...';
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+
+                try {
+                    const title = document.getElementById('publicationTitle').value;
+                    const content = document.getElementById('publicationContent').value;
+                    const category = document.getElementById('publicationCategory').value;
+                    const active = document.getElementById('publicationActive').checked;
+                    const date = document.getElementById('publicationDate').value || new Date().toISOString();
+                    const imageFile = document.getElementById('publicationImage').files[0];
+
+                    let imageUrl = document.getElementById('publicationPreview').src !== '#' ?
+                        document.getElementById('publicationPreview').src : null;
+
+                    if (imageFile) {
+                        imageUrl = await uploadImage(imageFile, 'publications');
+                    }
+
+                    if (currentAction === 'update' && currentItemToUpdate) {
+                        // Actualizar publicación existente
+                        const { data, error } = await supabase
+                            .from('publicaciones')
+                            .update({
+                                titulo: title,
+                                contenido: content,
+                                categoria: category,
+                                imagen_url: imageUrl,
+                                activo: active,
+                                fecha: date
+                            })
+                            .eq('id', currentItemToUpdate)
+                            .select();
+
+                        if (error) throw error;
+
+                        showResult('¡Publicación actualizada correctamente!', 'success');
+                    } else {
+                        // Crear nueva publicación
+                        const { data, error } = await supabase
+                            .from('publicaciones')
+                            .insert([{
+                                titulo: title,
+                                contenido: content,
+                                categoria: category,
+                                imagen_url: imageUrl,
+                                activo: active,
+                                fecha: date
+                            }])
+                            .select();
+
+                        if (error) throw error;
+
+                        showResult('¡Publicación guardada correctamente!', 'success');
+                    }
+
+                    resetForms();
+                    loadPublications();
+                } catch (error) {
+                    console.error('Error:', error);
+                    showResult(error.message || 'Error al guardar la publicación', 'danger');
+                } finally {
+                    publicationSpinner.style.display = 'none';
+                    publicationText.textContent = currentAction === 'update' ? 'Actualizar Publicación' : 'Guardar Publicación';
+                    submitBtn.disabled = false;
+                }
+            });
+
+            // Cargar lista de servicios
+            async function loadServices() {
+                try {
+                    servicesList.innerHTML = '<tr><td colspan="5" class="text-center"><div class="spinner-border text-primary" role="status"></div></td></tr>';
+
+                    const { data: servicios, error } = await supabase
+                        .from('servicios')
+                        .select('*')
+                        .order('id', { ascending: false });
+
+                    if (error) throw error;
+
+                    renderServices(servicios);
+                } catch (error) {
+                    console.error('Error al cargar servicios:', error);
+                    servicesList.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Error al cargar servicios: ${error.message}</td></tr>`;
+                }
+            }
+
+            // Renderizar servicios en la tabla
+            function renderServices(servicios) {
+                servicesList.innerHTML = '';
+
+                if (servicios.length === 0) {
+                    servicesList.innerHTML = '<tr><td colspan="5" class="text-center">No hay servicios registrados</td></tr>';
+                    return;
+                }
+
+                servicios.forEach(servicio => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            ${servicio.imagen_url ?
+                            `<img src="${servicio.imagen_url}" alt="${servicio.titulo}" class="item-img">` :
+                            '<i class="bi bi-image" style="font-size: 2rem;"></i>'}
+                        </td>
+                        <td>${servicio.titulo}</td>
+                        <td>${servicio.descripcion.substring(0, 50)}${servicio.descripcion.length > 50 ? '...' : ''}</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" ${servicio.activo ? 'checked' : ''} 
+                                    data-id="${servicio.id}" 
+                                    onchange="toggleItemStatus('servicio', '${servicio.id}', this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="ms-2">${servicio.activo ? 'Activo' : 'Inactivo'}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary action-btn" 
+                                onclick="editItem('servicio', '${servicio.id}')">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger action-btn" 
+                                onclick="confirmDelete('servicio', '${servicio.id}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    servicesList.appendChild(row);
+                });
+            }
+
+            // Cargar lista de publicaciones
+            async function loadPublications() {
+                try {
+                    publicationsList.innerHTML = '<tr><td colspan="6" class="text-center"><div class="spinner-border text-primary" role="status"></div></td></tr>';
+
+                    const { data: publicaciones, error } = await supabase
+                        .from('publicaciones')
+                        .select('*')
+                        .order('fecha', { ascending: false });
+
+                    if (error) throw error;
+
+                    renderPublications(publicaciones);
+                } catch (error) {
+                    console.error('Error al cargar publicaciones:', error);
+                    publicationsList.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error al cargar publicaciones: ${error.message}</td></tr>`;
+                }
+            }
+
+            // Renderizar publicaciones en la tabla
+            function renderPublications(publicaciones) {
+                publicationsList.innerHTML = '';
+
+                if (publicaciones.length === 0) {
+                    publicationsList.innerHTML = '<tr><td colspan="6" class="text-center">No hay publicaciones registradas</td></tr>';
+                    return;
+                }
+
+                publicaciones.forEach(publicacion => {
+                    const fecha = new Date(publicacion.fecha).toLocaleDateString();
+                    const categoria = formatCategory(publicacion.categoria);
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            ${publicacion.imagen_url ?
+                            `<img src="${publicacion.imagen_url}" alt="${publicacion.titulo}" class="item-img">` :
+                            '<i class="bi bi-image" style="font-size: 2rem;"></i>'}
+                        </td>
+                        <td>${publicacion.titulo}</td>
+                        <td><span class="badge-category">${categoria}</span></td>
+                        <td>${fecha}</td>
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" ${publicacion.activo ? 'checked' : ''} 
+                                    data-id="${publicacion.id}" 
+                                    onchange="toggleItemStatus('publicacion', '${publicacion.id}', this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="ms-2">${publicacion.activo ? 'Activo' : 'Inactivo'}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary action-btn" 
+                                onclick="editItem('publicacion', '${publicacion.id}')">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger action-btn" 
+                                onclick="confirmDelete('publicacion', '${publicacion.id}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    publicationsList.appendChild(row);
+                });
+            }
+            
+            // Cargar lista de clientes
+            async function loadClients() {
+                try {
+                    clientsList.innerHTML = '<tr><td colspan="6" class="text-center"><div class="spinner-border text-primary" role="status"></div></td></tr>';
+
+                    const { data: clientes, error } = await supabase
+                        .from('clientes')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+
+                    if (error) throw error;
+
+                    renderClients(clientes);
+                } catch (error) {
+                    console.error('Error al cargar clientes:', error);
+                    clientsList.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error al cargar clientes: ${error.message}</td></tr>`;
+                }
+            }
+            
+            // Renderizar clientes en la tabla
+            function renderClients(clientes) {
+                clientsList.innerHTML = '';
+
+                if (clientes.length === 0) {
+                    clientsList.innerHTML = '<tr><td colspan="6" class="text-center">No hay clientes registrados</td></tr>';
+                    return;
+                }
+
+                clientes.forEach(cliente => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${cliente.nombre || 'No especificado'}</td>
+                        <td>${cliente.correo || 'No especificado'}</td>
+                        <td>${cliente.telefono || 'No especificado'}</td>
+                        <td>${cliente.empresa || 'No especificada'}</td>
+                        <td>${cliente.mensaje ? cliente.mensaje.substring(0, 50) + (cliente.mensaje.length > 50 ? '...' : '') : 'Sin mensaje'}</td>
+                        <td>
+                            ${cliente.telefono ? 
+                            `<button class="btn btn-sm whatsapp-btn action-btn" 
+                                onclick="sendWhatsApp('${cliente.telefono}')">
+                                <i class="bi bi-whatsapp"></i> WhatsApp
+                            </button>` : ''}
+                        </td>
+                    `;
+                    clientsList.appendChild(row);
+                });
+            }
+            
+            // Función para enviar WhatsApp
+            window.sendWhatsApp = function(telefono) {
+                // Limpiar el número de teléfono (eliminar caracteres no numéricos)
+                const numeroLimpio = telefono.replace(/\D/g, '');
+                
+                // Verificar si el número tiene código de país (México en este caso)
+                const numeroConCodigo = numeroLimpio.length === 10 ? `52${numeroLimpio}` : numeroLimpio;
+                
+                // Abrir WhatsApp con el número
+                window.open(`https://wa.me/${numeroConCodigo}`, '_blank');
+            };
+
+            // Función para cambiar el estado (activo/inactivo)
+            window.toggleItemStatus = async function (tipo, id, newStatus) {
+                try {
+                    const tableName = tipo === 'servicio' ? 'servicios' : 'publicaciones';
+
+                    const { data, error } = await supabase
+                        .from(tableName)
+                        .update({ activo: newStatus })
+                        .eq('id', id)
+                        .select();
+
+                    if (error) throw error;
+
+                    showResult(`Estado actualizado correctamente a ${newStatus ? 'Activo' : 'Inactivo'}`, 'success');
+
+                    // Recargar la lista correspondiente
+                    if (tipo === 'servicio') {
+                        loadServices();
+                    } else {
+                        loadPublications();
+                    }
+                } catch (error) {
+                    console.error(`Error al actualizar estado del ${tipo}:`, error);
+                    showResult(`Error al actualizar estado del ${tipo}`, 'danger');
+
+                    // Revertir el cambio en la interfaz
+                    const checkbox = document.querySelector(`input[data-id="${id}"]`);
+                    if (checkbox) {
+                        checkbox.checked = !newStatus;
+                    }
+                }
+            };
+
+            // Función para confirmar eliminación
+            window.confirmDelete = function (tipo, id) {
+                currentItemToUpdate = id;
+                currentAction = 'delete';
+                currentItemType = tipo;
+
+                document.getElementById('confirmModalTitle').textContent = `Eliminar ${tipo}`;
+                document.getElementById('confirmModalBody').textContent =
+                    `¿Estás seguro de que deseas eliminar este ${tipo}? Esta acción no se puede deshacer.`;
+
+                confirmModal.show();
+            };
+
+            // Función para editar elemento
+            window.editItem = async function (tipo, id) {
+                try {
+                    const tableName = tipo === 'servicio' ? 'servicios' : 'publicaciones';
+
+                    const { data: item, error } = await supabase
+                        .from(tableName)
+                        .select('*')
+                        .eq('id', id)
+                        .single();
+
+                    if (error) throw error;
+
+                    if (tipo === 'servicio') {
+                        // Mostrar formulario de servicio
+                        const tabTrigger = new bootstrap.Tab(document.getElementById('add-tab'));
+                        tabTrigger.show();
+                        document.getElementById('service-form').classList.add('active-form');
+                        document.getElementById('publication-form').classList.remove('active-form');
+
+                        // Llenar formulario
+                        document.getElementById('serviceTitle').value = item.titulo;
+                        document.getElementById('serviceDescription').value = item.descripcion;
+                        document.getElementById('serviceActive').checked = item.activo;
+
+                        // Mostrar imagen si existe
+                        if (item.imagen_url) {
+                            const preview = document.getElementById('servicePreview');
+                            preview.src = item.imagen_url;
+                            preview.style.display = 'block';
+                        }
+
+                        // Guardar ID para actualización
+                        currentItemToUpdate = id;
+                        currentAction = 'update';
+                        currentItemType = tipo;
+
+                        // Cambiar texto del botón
+                        document.getElementById('serviceText').innerHTML = '<i class="bi bi-save"></i> Actualizar Servicio';
+                    } else {
+                        // Mostrar formulario de publicación
+                        const tabTrigger = new bootstrap.Tab(document.getElementById('add-tab'));
+                        tabTrigger.show();
+                        document.getElementById('publication-form').classList.add('active-form');
+                        document.getElementById('service-form').classList.remove('active-form');
+
+                        // Llenar formulario
+                        document.getElementById('publicationTitle').value = item.titulo;
+                        document.getElementById('publicationContent').value = item.contenido;
+                        document.getElementById('publicationActive').checked = item.activo;
+                        document.getElementById('publicationDate').value = item.fecha.substring(0, 16);
+
+                        // Seleccionar la categoría correcta
+                        const categorySelect = document.getElementById('publicationCategory');
+                        for (let i = 0; i < categorySelect.options.length; i++) {
+                            if (categorySelect.options[i].value === item.categoria) {
+                                categorySelect.selectedIndex = i;
+                                break;
+                            }
+                        }
+                        // Mostrar imagen si existe
+                        if (item.imagen_url) {
+                            const preview = document.getElementById('publicationPreview');
+                            preview.src = item.imagen_url;
+                            preview.style.display = 'block';
+                        }
+
+                        // Guardar ID para actualización
+                        currentItemToUpdate = id;
+                        currentAction = 'update';
+                        currentItemType = tipo;
+
+                        // Cambiar texto del botón
+                        document.getElementById('publicationText').innerHTML = '<i class="bi bi-save"></i> Actualizar Publicación';
+                    }
+                } catch (error) {
+                    console.error(`Error al cargar ${tipo} para editar:`, error);
+                    showResult(`Error al cargar ${tipo} para editar`, 'danger');
+                }
+            };
+
+            // Confirmar acción en el modal
+            confirmActionBtn.addEventListener('click', async function () {
+                if (!currentItemToUpdate || !currentAction || !currentItemType) return;
+
+                confirmModal.hide();
+
+                try {
+                    if (currentAction === 'delete') {
+                        const tableName = currentItemType === 'servicio' ? 'servicios' : 'publicaciones';
+
+                        const { error } = await supabase
+                            .from(tableName)
+                            .delete()
+                            .eq('id', currentItemToUpdate);
+
+                        if (error) throw error;
+
+                        showResult(`${currentItemType.charAt(0).toUpperCase() + currentItemType.slice(1)} eliminado correctamente`, 'success');
+
+                        // Recargar la lista
+                        if (currentItemType === 'servicio') {
+                            loadServices();
+                        } else {
+                            loadPublications();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error al realizar acción:', error);
+                    showResult('Error al realizar la acción', 'danger');
+                }
+            });
+
+            // Búsqueda dinámica de servicios
+            serviceSearch.addEventListener('input', async function (e) {
+                const searchTerm = e.target.value.toLowerCase();
+
+                const { data: servicios, error } = await supabase
+                    .from('servicios')
+                    .select('*');
+
+                if (error) {
+                    console.error('Error al buscar servicios:', error);
+                    return;
+                }
+
+                const filtered = servicios.filter(servicio =>
+                    servicio.titulo.toLowerCase().includes(searchTerm) ||
+                    servicio.descripcion.toLowerCase().includes(searchTerm)
+                );
+
+                renderServices(filtered);
+            });
+
+            // Búsqueda dinámica de publicaciones
+            publicationSearch.addEventListener('input', async function (e) {
+                const searchTerm = e.target.value.toLowerCase();
+
+                const { data: publicaciones, error } = await supabase
+                    .from('publicaciones')
+                    .select('*');
+
+                if (error) {
+                    console.error('Error al buscar publicaciones:', error);
+                    return;
+                }
+
+                const filtered = publicaciones.filter(publicacion =>
+                    publicacion.titulo.toLowerCase().includes(searchTerm) ||
+                    publicacion.contenido.toLowerCase().includes(searchTerm) ||
+                    publicacion.categoria.toLowerCase().includes(searchTerm)
+                );
+
+                renderPublications(filtered);
+            });
+            
+            // Búsqueda dinámica de clientes
+            clientSearch.addEventListener('input', async function (e) {
+                const searchTerm = e.target.value.toLowerCase();
+
+                const { data: clientes, error } = await supabase
+                    .from('clientes')
+                    .select('*');
+
+                if (error) {
+                    console.error('Error al buscar clientes:', error);
+                    return;
+                }
+
+                const filtered = clientes.filter(cliente =>
+                    (cliente.nombre && cliente.nombre.toLowerCase().includes(searchTerm)) ||
+                    (cliente.correo && cliente.correo.toLowerCase().includes(searchTerm)) ||
+                    (cliente.telefono && cliente.telefono.toLowerCase().includes(searchTerm)) ||
+                    (cliente.empresa && cliente.empresa.toLowerCase().includes(searchTerm)) ||
+                    (cliente.mensaje && cliente.mensaje.toLowerCase().includes(searchTerm))
+                );
+
+                renderClients(filtered);
+            });
+
+            // Mostrar mensaje de resultado
+            function showResult(message, type) {
+                resultMessage.innerHTML = message;
+                resultMessage.className = `alert alert-${type}`;
+                resultMessage.style.display = 'block';
+                setTimeout(() => resultMessage.style.display = 'none', 5000);
+            }
+
+            function formatCategory(category) {
+                const categoryMap = {
+                    'noticias': '📰 Noticias',
+                    'novedades': '🚀 Novedades de la empresa',
+                    'ofertas': '🎁 Ofertas temporales',
+                    'anuncios': '📢 Anuncios importantes',
+                    'tips': '🧠 Tips o artículos técnicos'
+                };
+                return categoryMap[category] || category;
+            }
+        });
+    </script>
+</body>
+
+</html>
